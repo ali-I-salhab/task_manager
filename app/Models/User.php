@@ -1,5 +1,5 @@
 <?php
-
+// this model deal with user table
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
