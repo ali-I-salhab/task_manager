@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-
     public function index()
     {
         $tasks = Task::all();
         return response()->json($tasks);
     }
-    public function update(int $id, Request $request)
+    public function update(int $id, UpdateTaskRequest $request)
     {
         $task = Task::findOrFail($id);
 
 
 
         $task->update(
-            $request->all()
+            $request->validated()
         );
 
 
@@ -44,15 +45,15 @@ class TaskController extends Controller
         // the better soloution is to write validation
         // use Form_request
         // php artisan make:request task
-       $data= $request->validate([
-            "tit" =>"required|string|min:5|max:10",
-            "des" => "nullable|string",
-            "prio" => "required|integer|min:1|max:5"]);
+    //    $data= $request->validate([
+    //         "tit" =>"required|string|min:5|max:10",
+    //         "des" => "nullable|string",
+    //         "prio" => "required|integer|min:1|max:5"]);
 
 
 
         $respo =   Task::create(
-          $data
+          $request->validated()
         );
 
         return response()->json($respo, 400);
