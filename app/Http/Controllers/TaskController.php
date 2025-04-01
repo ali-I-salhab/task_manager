@@ -37,9 +37,13 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         return response()->json($task);
     }
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
         // validation of data
+        // it is not true to write validadtion in the same page of controller
+        // the better soloution is to write validation
+        // use Form_request
+        // php artisan make:request task
        $data= $request->validate([
             "tit" =>"required|string|min:5|max:10",
             "des" => "nullable|string",
