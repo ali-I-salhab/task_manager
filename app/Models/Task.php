@@ -11,6 +11,9 @@ class Task extends Model
    protected function user(){
     return $this->belongsTo(User::class);
    }
+    function categories(){
+    return $this->belongsToMany(Category::class,"category_task");
+   }
 }
 //  php artisan make:model -m
 // we her create both model and migration file e

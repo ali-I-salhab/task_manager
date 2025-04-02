@@ -21,3 +21,4 @@ Route::apiResource("tasks", TaskController::class);
  Route::get("/user/{id}/profile",[UserController::class,"getprofile"]);
 
  Route::get("/user/{id}/tasks",[UserController::class,"getusertasks"]);
+ Route::post("/tasks/{taskid}/categories",[TaskController::class,"getcategoriestotask"]);
