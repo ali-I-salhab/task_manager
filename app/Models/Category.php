@@ -11,5 +11,7 @@ class Category extends Model
     protected function tasks(){
 
         return $this->belongsToMany(Task::class,"category_task");
+
+
        }
 }
