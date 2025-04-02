@@ -26,3 +26,10 @@ Route::apiResource("tasks", TaskController::class);
  Route::get("/tasks/{taskid}/categories",[TaskController::class,"getcategoriestotask"]);
  Route::get("/categories/{catid}/tasks",[TaskController::class,"gettaskstocategories"]);
  Route::post("/categories/{catid}/tasks",[TaskController::class,"addtaskstocategories"]);
+
+
+
+//  auth
+Route::post("/register",[UserController::class,"register"]);
+Route::post("/login",action: [UserController::class,"login"]);
+Route::post("/logout",[UserController::class,"logout"]);
