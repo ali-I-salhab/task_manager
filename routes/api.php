@@ -15,10 +15,13 @@ Route::get('/user', function (Request $request) {
 // Route::get("/tasks/{id}",[TaskController::class,"show"]);
 
 // Route::delete("/tasks/{id}",[TaskController::class,"destroy"]);
-Route::apiResource("tasks", TaskController::class);
- Route::post("/profile",[ProfileController::class,"store"]);
- Route::get("/profile/{id}",[ProfileController::class,"show"]);
- Route::get("/user/{id}/profile",[UserController::class,"getprofile"]);
+Route::apiResource("tasks", TaskController::class)->middleware('auth:sanctum');
+ Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix("profile")->group(function(){
+        Route::post("/",[ProfileController::class,"store"]);
+ Route::get("/{id}",[ProfileController::class,"show"]);
+    });
+//  Route::update("/profile/{id}",[ProfileController::class,"update"]);
 
  Route::get("/user/{id}/tasks",[UserController::class,"getusertasks"]);
 //  here we add to pivot table
@@ -33,3 +36,6 @@ Route::apiResource("tasks", TaskController::class);
 Route::post("/register",[UserController::class,"register"]);
 Route::post("/login",action: [UserController::class,"login"]);
 Route::post("/logout",[UserController::class,"logout"]);
+ });
+
+

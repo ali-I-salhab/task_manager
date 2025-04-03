@@ -7,34 +7,37 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     public function index()
-    {
-        $tasks = Task::all();
+    {$user=Auth::user();
+        $tasks = $user->tasks;
         return response()->json($tasks);
     }
     //
-  public function getcategoriestotask(int $taskid){
-    $task = Task::findOrFail($taskid);
-    return response()->json( $task->categories);
-  }
+    public function getcategoriestotask(int $taskid)
+    {
+        $task = Task::findOrFail($taskid);
+        return response()->json($task->categories);
+    }
 
-  public function gettaskstocategories($catid){
-    // echo"$catid";
-    $cat= Category::findOrFail($catid);
-    return response()->json( $cat->tasks);
-  }
-  public function addtaskstocategories(int $catid, Request $request)
-  {
+    public function gettaskstocategories($catid)
+    {
+        // echo"$catid";
+        $cat = Category::findOrFail($catid);
+        return response()->json($cat->tasks);
+    }
+    public function addtaskstocategories(int $catid, Request $request)
+    {
 
-      $cat = Category::findOrFail($catid);
-      $cat->tasks()->attach($request->task_id);
+        $cat = Category::findOrFail($catid);
+        $cat->tasks()->attach($request->task_id);
 
 
-      return response()->json("successfully",200);
-  }
+        return response()->json("successfully", 200);
+    }
     public function addcategoriestotask(int $taskid, Request $request)
     {
 
@@ -42,20 +45,29 @@ class TaskController extends Controller
         $task->categories()->attach($request->category_id);
 
 
-        return response()->json("successfully",200);
+        return response()->json("successfully", 200);
     }
     public function update(int $id, UpdateTaskRequest $request)
     {
         $task = Task::findOrFail($id);
+        echo $task;
+        echo "------------------------";
+        echo Auth::user()->id;
+        if($task->user_id==Auth::user()->id){
+            $task->update(
+                $request->validated()
+            );
+
+
+            return response()->json($task);
+        }else{
+            return response()->json(["message"=>"forbidden"],403);
+
+        }
 
 
 
-        $task->update(
-            $request->validated()
-        );
 
-
-        return response()->json($task);
     }
     public function destroy(int $id)
     {
@@ -80,12 +92,13 @@ class TaskController extends Controller
         //         "des" => "nullable|string",
         //         "prio" => "required|integer|min:1|max:5"]);
 
-
+        $data=$request->validated();
+        $data["user_id"]=Auth::user()->id;
 
         $respo =   Task::create(
-            $request->validated()
+            $data
         );
 
-        return response()->json($respo, 400);
+        return response()->json($respo, 201);
     }
 }

@@ -15,6 +15,12 @@ class ProfileController extends Controller
         $user=User::find($data->user_id);
         return response()->json(["message" => "profile created succesfully", "user"=>$user,"profile" => $data], 200);
     }
+    public function update(StoreProfileRequest $request)
+    {
+        $data = Profile::update($request->validated());
+
+        return response()->json(["update profile successfully" => "profile created succesfully","profile" => $data], 200);
+    }
     // define function take user id and return profile
     public function show($id){
         $profile=Profile::where("user_id",$id)->first();
