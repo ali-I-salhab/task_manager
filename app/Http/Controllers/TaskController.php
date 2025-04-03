@@ -16,6 +16,10 @@ class TaskController extends Controller
         $tasks = $user->tasks;
         return response()->json($tasks);
     }
+    public function getalltasks(){
+        $tasks = Task::all();
+        return response()->json($tasks);
+    }
     //
     public function getcategoriestotask(int $taskid)
     {

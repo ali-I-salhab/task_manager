@@ -30,12 +30,13 @@ Route::apiResource("tasks", TaskController::class)->middleware('auth:sanctum');
  Route::get("/categories/{catid}/tasks",[TaskController::class,"gettaskstocategories"]);
  Route::post("/categories/{catid}/tasks",[TaskController::class,"addtaskstocategories"]);
 
+ Route::get("/task/all",[TaskController::class,"getalltasks"])->middleware("checkuserrule");
 
 
 //  auth
-Route::post("/register",[UserController::class,"register"]);
-Route::post("/login",action: [UserController::class,"login"]);
+
 Route::post("/logout",[UserController::class,"logout"]);
  });
 
-
+ Route::post("/register",[UserController::class,"register"]);
+ Route::post("/login",action: [UserController::class,"login"]);
