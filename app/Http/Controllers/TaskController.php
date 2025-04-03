@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -80,12 +81,14 @@ class TaskController extends Controller
         //         "des" => "nullable|string",
         //         "prio" => "required|integer|min:1|max:5"]);
 
+        $user=Auth::user();
 
+$validateddata=$request->validated();
+$validateddata['user_id']=$user->id;
+        $respo =   Task::create($validateddata
 
-        $respo =   Task::create(
-            $request->validated()
         );
 
-        return response()->json($respo, 400);
+        return response()->json($validateddata, 400);
     }
 }

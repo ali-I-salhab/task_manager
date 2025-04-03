@@ -24,7 +24,7 @@ class UpdateTaskRequest extends FormRequest
         return [
             "tit" =>"sometimes|string|min:5|max:10",
             "des" => "nullable|string",
-            "prio" => "sometimes|integer|min:1|max:5"
+            "prio" => "string|in:low,medium,high"
         ];
     }
     public function messages(): array
