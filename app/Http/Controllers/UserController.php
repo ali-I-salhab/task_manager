@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use app\Models\Task;
 use App\Models\Task as ModelsTask;
@@ -44,7 +45,8 @@ class UserController extends Controller
         "email"=> $request->email,
         "password"=>Hash::make($request->password),
     ]);
-    return response()->json(["status"=> "success","user"=>$user]);
+    User::with("profile")->get();
+    return new UserResource($user);
     }
 
 

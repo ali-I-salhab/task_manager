@@ -14,6 +14,10 @@ class Task extends Model
     function categories(){
     return $this->belongsToMany(Category::class,"category_task");
    }
+   public function favorbyuser(){
+
+    return $this->belongsToMany(User::class,'favorites');
+}
 }
 //  php artisan make:model -m
 // we her create both model and migration file e

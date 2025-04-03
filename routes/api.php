@@ -32,11 +32,16 @@ Route::apiResource("tasks", TaskController::class)->middleware('auth:sanctum');
 
  Route::get("/task/all",[TaskController::class,"getalltasks"])->middleware("checkuserrule");
 
+ Route::get("/task/ordered",[TaskController::class,"getorderedalltasks"]);
 
 //  auth
 
 Route::post("/logout",[UserController::class,"logout"]);
+Route::post("tasks/{id}/favorite",action: [TaskController::class,"addtofavorite"]);
+Route::delete("tasks/{id}/favorite",action: [TaskController::class,"removefromfavorite"]);
+Route::get("task/favorites",action: [TaskController::class,"getfavoritetasks"]);
  });
 
  Route::post("/register",[UserController::class,"register"]);
  Route::post("/login",action: [UserController::class,"login"]);
+

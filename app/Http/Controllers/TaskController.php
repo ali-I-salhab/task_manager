@@ -6,12 +6,36 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Category;
 use App\Models\Task;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Stmt\TryCatch;
 
 class TaskController extends Controller
-{
+
+{public function getorderedalltasks(){
+
+    $user=Auth::user();
+        $tasks = $user->tasks()->orderByRaw("FIELD(prio,'low','medium','high')")->get();
+        return response()->json($tasks);
+}
+public function getfavoritetasks(){
+
+    $user=Auth::user();
+
+        $tasks = $user->favorites;
+        return response()->json(["message"=> "sucess","data"=> $tasks]);
+
+}
+public function addtofavorite($taskid){
+    Auth::user()->favorites()->syncWithoutDetaching($taskid);
+    return response()->json(["status"=> "success"]);
+}
+public function removefromfavorite($taskid){
+    Auth::user()->favorites()->detach($taskid);
+    return response()->json(["status"=> "success"]);
+}
     public function index()
     {$user=Auth::user();
         $tasks = $user->tasks;
@@ -76,9 +100,16 @@ class TaskController extends Controller
     }
     public function destroy(int $id)
     {
+    try{
         $task = Task::findOrFail($id);
         $task->delete();
-        return response()->json(['deleted was successfully'], 200);
+        return response()->json(['message'=>'deleted was successfully'], 200);
+    }catch(ModelNotFoundException $e){
+        return response()->json(['message'=>'not found',"details"=>$e], 404);
+    }
+    catch(Exception $e){
+        return response()->json(['message'=>'not found',"details"=>$e],  404);
+    }
     }
     public function show(int $id)
     {
@@ -101,7 +132,7 @@ class TaskController extends Controller
 
 $validateddata=$request->validated();
 $validateddata['user_id']=$user->id;
-        $respo =   Task::create($validateddata
+        $respo =   Task::create($validateddata);
         $data=$request->validated();
         $data["user_id"]=Auth::user()->id;
 

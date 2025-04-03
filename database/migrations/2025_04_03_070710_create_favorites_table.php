@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('profiles', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('phone');
-            $table->string('adress')->nullable();
-            $table->date('date_of_birth')->nullable();
-            $table->string('bio')->nullable();
-            $table->string('image');
+            $table->foreignId('user_id')->constrained("users")->cascadeOnDelete();
+            $table->foreignId('task_id')->constrained("tasks")->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('profiles');
+        Schema::dropIfExists('favorites');
     }
 };
